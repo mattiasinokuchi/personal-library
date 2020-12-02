@@ -23,7 +23,11 @@ module.exports = function (app) {
         // ...and returns the data
         res.json(doc);
       } catch(error) {
-        console.log(error);
+        if (error.name == 'CastError') {
+          res.send('no book exists');
+        } else {
+          console.log(error);
+        }
       }
     })
     
