@@ -14,14 +14,28 @@ const Document = require('../model');
 module.exports = function (app) {
 
   app.route('/api/books')
-    .get(function (req, res){
+    .get(async function (req, res) {
       //response will be array of book objects
       //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
     })
     
-    .post(function (req, res){
-      let title = req.body.title;
-      //response will contain new book object including atleast _id and title
+    // handler for request of new book...
+    .post(async function (req, res) {
+      console.log('post request');
+      try {
+        console.log('req.body: ', req.body);
+        // ...creates a document...
+        let document = new Document({
+          title: req.body.title
+        });
+        // ...saves it in the database...
+        const doc = await document.save();
+        // ...returns data...
+        res.json(doc);
+        //response will contain new book object including atleast _id and title
+      } catch (error) {
+        console.log(error);
+      }
     })
     
     .delete(function(req, res){
