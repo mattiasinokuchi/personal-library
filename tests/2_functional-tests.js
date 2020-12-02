@@ -23,7 +23,6 @@ suite('Functional Tests', function() {
      chai.request(server)
       .get('/api/books')
       .end(function(err, res){
-        console.log('res.body: ', res.body);
         assert.equal(res.status, 200);
         assert.isArray(res.body, true);
         assert.property(res.body[0], 'commentcount', true);
@@ -35,16 +34,27 @@ suite('Functional Tests', function() {
   /*
   * ----[END of EXAMPLE TEST]----
   */
-/*
-  suite('Routing tests', function() {
 
+  suite('Routing tests', function() {
 
     suite('POST /api/books with title => create book object/expect book object', function() {
       
       test('Test POST /api/books with title', function(done) {
-        //done();
+        chai.request(server)
+        .post('/api/books')
+        .send({
+          title: 'ABC'
+        })
+        .end(function(err, res) {
+          assert.equal(res.status, 200);
+          assert.isObject(res.body, true);
+          assert.property(res.body, 'title', true);
+          assert.property(res.body, '_id', true);
+          assert.equal(res.body.title, 'ABC');
+          done();
+        });
       });
-      
+      /*
       test('Test POST /api/books with no title given', function(done) {
         //done();
       });
@@ -99,9 +109,9 @@ suite('Functional Tests', function() {
       test('Test DELETE /api/books/[id] with  id not in db', function(done){
         //done();
       });
-
+*/
     });
 
-  });*/
+  });
 
 });
