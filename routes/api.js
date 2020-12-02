@@ -14,16 +14,22 @@ const Document = require('../model');
 module.exports = function (app) {
 
   app.route('/api/books')
+
+    // handler for reading books...
     .get(async function (req, res) {
-      //response will be array of book objects
-      //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
+      try {
+        // ...finds requested documents in      database... 
+        let doc = await Document.find(req.query);
+        // ...and returns the data
+        res.json(doc);
+      } catch(error) {
+        console.log(error);
+      }
     })
     
-    // handler for request of new book...
+    // handler for creating books...
     .post(async function (req, res) {
-      console.log('post request');
       try {
-        console.log('req.body: ', req.body);
         // ...creates a document...
         let document = new Document({
           title: req.body.title
@@ -32,15 +38,31 @@ module.exports = function (app) {
         const doc = await document.save();
         // ...returns data...
         res.json(doc);
-        //response will contain new book object including atleast _id and title
       } catch (error) {
         console.log(error);
       }
     })
     
-    .delete(function(req, res){
-      //if successful response will be 'complete delete successful'
-    });
+    // handler for deleting books...
+    .delete(async function(req, res){
+      try {
+        // ...finds and deletes requested document in database...
+        let doc = await Document.findByIdAndDelete(req.body._id, req.body);
+        // ...checks if document is found...
+        if (!doc) throw 'invalid id';
+        // ...returns message...
+        res.json( { result: 'successfully deleted', '_id': doc._id } );
+      } catch(error) {
+        // ...or error message
+        if (error.name == 'CastError') {
+          res.json({ error: "missing _id" });
+        } else if (error == 'invalid id') {
+          res.json({ error: "could not delete", "_id": req.body._id });
+        } else {
+        console.log(error);
+      }
+    }
+  });
 
 
 
