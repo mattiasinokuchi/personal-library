@@ -8,6 +8,9 @@
 
 'use strict';
 
+// Import data model
+const Document = require('../model');
+
 module.exports = function (app) {
 
   app.route('/api/books')
