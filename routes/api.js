@@ -39,7 +39,12 @@ module.exports = function (app) {
         // ...returns data...
         res.json(doc);
       } catch (error) {
-        console.log(error);
+        // ...or sends error message
+        if (error.name == 'ValidationError') {
+          res.send("missing required field title");
+        } else {
+          console.log(error);
+        }
       }
     })
     

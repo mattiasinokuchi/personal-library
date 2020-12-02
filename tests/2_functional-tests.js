@@ -22,7 +22,7 @@ suite('Functional Tests', function() {
   test('#example Test GET /api/books', function(done){
      chai.request(server)
       .get('/api/books')
-      .end(function(err, res){
+      .end(function(err, res) {
         assert.equal(res.status, 200);
         assert.isArray(res.body, true);
         assert.property(res.body[0], 'commentcount', true);
@@ -54,11 +54,20 @@ suite('Functional Tests', function() {
           done();
         });
       });
-      /*
-      test('Test POST /api/books with no title given', function(done) {
-        //done();
-      });
       
+      test('Test POST /api/books with no title given', function(done) {
+        chai.request(server)
+        .post('/api/books')
+        .send({
+          title: ''
+        })
+        .end(function(err, res) {
+          assert.equal(res.status, 200);
+          assert.equal(res.text, 'missing required field title');
+          done();
+        });
+      });
+      /*
     });
 
 
