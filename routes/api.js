@@ -64,8 +64,6 @@ module.exports = function (app) {
     }
   });
 
-
-
   app.route('/api/books/:id')
     .get(function (req, res){
       let bookid = req.params.id;

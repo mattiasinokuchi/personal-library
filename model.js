@@ -27,7 +27,8 @@ const schema = new mongoose.Schema({
     required: [true, 'missing field']
   },
   commentcount: {
-    type: Number
+    type: Number,
+    default: 0
   },
 });
 
