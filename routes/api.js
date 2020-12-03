@@ -75,11 +75,11 @@ module.exports = function (app) {
   app.route('/api/books/:id')
 
     // handler for GET request of a book...
-    .get(async function (req, res){
+    .get(async function (req, res) {
       try {
         // ...finds requested documents in      database...
         let doc = await Document.findById(req.params.id);
-        // ...and returns the data
+        // ...and returns the data...
         res.json({
           comments: doc.comments,
           _id: doc._id,
@@ -88,6 +88,7 @@ module.exports = function (app) {
           __v: doc.__v
         });
       } catch(error) {
+        // ..or returns a error message
         if (error.name == 'CastError') {
           res.send('no book exists');
         } else {
@@ -96,10 +97,34 @@ module.exports = function (app) {
       }
     })
     
-    .post(function(req, res){
-      let bookid = req.params.id;
-      let comment = req.body.comment;
-      //json res format same as .get
+    // handler for POST request of a comment...
+    .post(async function(req, res) {
+      try {
+        // ...finds a document...
+        let doc = await Document.findById(req.params.id);
+        console.log('doc: ', doc);
+        // ...adds the comment...
+        doc.comments.push(req.body.comment);
+        // ...increments counter...
+        doc.commentcount++;
+        // ...saves the document...
+        await doc.save();
+        // ...returns data...
+        res.json({
+          comments: doc.comments,
+          _id: doc._id,
+          title: doc.title,
+          commentcount: doc.commentcount,
+          __v: doc.__v
+        });
+      } catch (error) {
+        // ...or sends error message
+        if (error.name == 'ValidationError') {
+          res.send("missing required field title");
+        } else {
+          console.log(error);
+        }
+      }
     })
     
     .delete(function(req, res){

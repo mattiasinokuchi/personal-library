@@ -11,6 +11,7 @@ const chai = require('chai');
 const assert = chai.assert;
 const server = require('../server');
 let testId = null;
+let urlWithValidId = null;
 
 chai.use(chaiHttp);
 
@@ -104,7 +105,8 @@ suite('Functional Tests', function() {
       
       test('Test GET /api/books/[id] with valid id in db', function(done) {
 
-        let urlWithValidId = '/api/books/' + testId;
+      urlWithValidId = '/api/books/' + testId;
+      console.log('urlWithValidId: ', urlWithValidId);
 
         chai.request(server)
         .get(urlWithValidId)
@@ -117,16 +119,30 @@ suite('Functional Tests', function() {
           done();
         });
       });
-      /*
+      
     });
-
 
     suite('POST /api/books/[id] => add comment/expect book object with id', function(){
       
-      test('Test POST /api/books/[id] with comment', function(done){
-        //done();
-      });
+      console.log('urlWithValidId: ', urlWithValidId);
 
+      test('Test POST /api/books/[id] with comment', function(done) {
+        chai.request(server)
+        .post(urlWithValidId)
+        .send({
+          comment: 'DEF'
+        })
+        .end(function(err, res) {
+          console.log('res.body: ', res.body);
+          assert.equal(res.status, 200);
+          assert.isObject(res.body, true);
+          assert.property(res.body, 'comments', true);
+          assert.property(res.body, 'title', true);
+          assert.property(res.body, '_id', true);
+          done();
+        });
+      });
+/*
       test('Test POST /api/books/[id] without comment field', function(done){
         //done();
       });
