@@ -18,18 +18,18 @@ mongoose.connection.once('open', function() {
 
 // Define schema (constructor) for MongoDB documents
 const schema = new mongoose.Schema({
-  comments: {
-    type: Array,
-    required: [true, 'missing field']
-  },
   title: {
     type: String,
+    required: [true, 'missing field']
+  },
+  comments: {
+    type: Array,
     required: [true, 'missing field']
   },
   commentcount: {
     type: Number,
     default: 0
-  },
+  }
 });
 
 // Define model (class) for MongoDB documents

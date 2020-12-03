@@ -15,23 +15,7 @@ module.exports = function (app) {
 
   app.route('/api/books')
 
-    // handler for reading books...
-    .get(async function (req, res) {
-      try {
-        // ...finds requested documents in      database... 
-        let doc = await Document.find(req.query);
-        // ...and returns the data
-        res.json(doc);
-      } catch(error) {
-        if (error.name == 'CastError') {
-          res.send('no book exists');
-        } else {
-          console.log(error);
-        }
-      }
-    })
-    
-    // handler for creating books...
+    // handler for POST request of a book...
     .post(async function (req, res) {
       try {
         // ...creates a document...
@@ -41,7 +25,10 @@ module.exports = function (app) {
         // ...saves it in the database...
         const doc = await document.save();
         // ...returns data...
-        res.json(doc);
+        res.json({
+          _id: doc._id,
+          title: doc.title
+        });
       } catch (error) {
         // ...or sends error message
         if (error.name == 'ValidationError') {
@@ -49,6 +36,18 @@ module.exports = function (app) {
         } else {
           console.log(error);
         }
+      }
+    })
+    
+    // handler for GET request to all books...
+    .get(async function (req, res) {
+      try {
+        // ...finds requested documents in      database... 
+        let doc = await Document.find(req.query);
+        // ...and returns the data
+        res.json(doc);
+      } catch(error) {
+        console.log(error);
       }
     })
     
@@ -74,9 +73,27 @@ module.exports = function (app) {
   });
 
   app.route('/api/books/:id')
-    .get(function (req, res){
-      let bookid = req.params.id;
-      //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
+
+    // handler for GET request of a book...
+    .get(async function (req, res){
+      try {
+        // ...finds requested documents in      database...
+        let doc = await Document.findById(req.params.id);
+        // ...and returns the data
+        res.json({
+          comments: doc.comments,
+          _id: doc._id,
+          title: doc.title,
+          commentcount: doc.commentcount,
+          __v: doc.__v
+        });
+      } catch(error) {
+        if (error.name == 'CastError') {
+          res.send('no book exists');
+        } else {
+          console.log(error);
+        }
+      }
     })
     
     .post(function(req, res){
