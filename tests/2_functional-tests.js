@@ -106,7 +106,6 @@ suite('Functional Tests', function() {
       test('Test GET /api/books/[id] with valid id in db', function(done) {
 
       urlWithValidId = '/api/books/' + testId;
-      console.log('urlWithValidId: ', urlWithValidId);
 
         chai.request(server)
         .get(urlWithValidId)
@@ -124,8 +123,6 @@ suite('Functional Tests', function() {
 
     suite('POST /api/books/[id] => add comment/expect book object with id', function(){
       
-      console.log('urlWithValidId: ', urlWithValidId);
-
       test('Test POST /api/books/[id] with comment', function(done) {
         chai.request(server)
         .post(urlWithValidId)
@@ -133,12 +130,12 @@ suite('Functional Tests', function() {
           comment: 'DEF'
         })
         .end(function(err, res) {
-          console.log('res.body: ', res.body);
           assert.equal(res.status, 200);
           assert.isObject(res.body, true);
           assert.property(res.body, 'comments', true);
           assert.property(res.body, 'title', true);
           assert.property(res.body, '_id', true);
+          assert.equal(res.body.comments.length, 1);
           done();
         });
       });
