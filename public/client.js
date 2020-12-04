@@ -18,7 +18,7 @@ $( document ).ready(function() {
       }).appendTo('#display');
   });
   
-  let  comments = [];
+  let comments = [];
   $('#display').on('click','li.bookItem',function() {
     $("#detailTitle").html('<b>'+itemsRaw[this.id].title+'</b> (id: '+itemsRaw[this.id]._id+')');
     $.getJSON('/api/books/'+itemsRaw[this.id]._id, function(data) {
@@ -74,12 +74,9 @@ $( document ).ready(function() {
     $.ajax({
       url: '/api/books',
       type: 'delete',
-      dataType: 'json',
-      data: $('#newBookForm').serialize(),
       success: function(data) {
-        //update list
+        $('#detailComments').html('<p style="color: red;">'+data+'<p><p>Refresh the page</p>');
       }
     });
-  }); 
-  
+  });
 });

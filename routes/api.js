@@ -51,25 +51,16 @@ module.exports = function (app) {
       }
     })
     
-    // handler for deleting books...
+    // handler for deleting all books...
     .delete(async function(req, res){
       try {
-        // ...finds and deletes requested document in database...
-        let doc = await Document.findByIdAndDelete(req.body._id, req.body);
-        // ...checks if document is found...
-        if (!doc) throw 'invalid id';
+        // ...deletes all documents in database...
+        await Document.deleteMany();
         // ...returns message...
-        res.json( { result: 'successfully deleted', '_id': doc._id } );
+        res.send('complete delete successful');
       } catch(error) {
-        // ...or error message
-        if (error.name == 'CastError') {
-          res.json({ error: "missing _id" });
-        } else if (error == 'invalid id') {
-          res.json({ error: "could not delete", "_id": req.body._id });
-        } else {
         console.log(error);
       }
-    }
   });
 
   app.route('/api/books/:id')
@@ -132,25 +123,20 @@ module.exports = function (app) {
       }
     })
     
+    // handler for deleting one book...
     .delete(async function(req, res){
-      let bookid = req.params.id;
       try {
-      // ...finds and deletes requested document in database... 
-      let doc = await Document.findByIdAndDelete(req.params.id);
-      // ...checks if document is found...
-      //if (!doc) throw 'invalid id';
-      // ...returns message...
-      res.send('delete successful');
-    } catch(error) {
-      // ...or error message
-      if (error.name == 'CastError') {
-        res.send('no book exists');
-      /*} else if (error == 'invalid id') {
-        res.json({ error: "could not delete", "_id": req.body._id });*/
-      } else {
-        console.log(error);
+        // ...finds and deletes requested document in database...
+        let doc = await Document.findByIdAndDelete(req.params.id);
+        // ...returns message...
+        res.send('delete successful');
+      } catch(error) {
+        // ...or error message
+        if (error.name == 'CastError') {
+          res.send('no book exists');
+        } else {
+          console.log(error);
+        }
       }
-    }
     });
-  
 };

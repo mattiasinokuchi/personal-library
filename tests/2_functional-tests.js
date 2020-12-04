@@ -180,13 +180,16 @@ suite('Functional Tests', function() {
           done();
         });
       });
-/*
+
       test('Test DELETE /api/books/[id] with  id not in db', function(done){
-        //done();
+        chai.request(server)
+        .delete('/api/books/idnotindb')
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.equal(res.text, 'no book exists');
+          done();
+        });
       });
-*/
     });
-
   });
-
 });
