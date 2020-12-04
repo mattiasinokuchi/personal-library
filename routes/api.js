@@ -132,9 +132,25 @@ module.exports = function (app) {
       }
     })
     
-    .delete(function(req, res){
+    .delete(async function(req, res){
       let bookid = req.params.id;
-      //if successful response will be 'delete successful'
+      try {
+      // ...finds and deletes requested document in database... 
+      let doc = await Document.findByIdAndDelete(req.params.id);
+      // ...checks if document is found...
+      //if (!doc) throw 'invalid id';
+      // ...returns message...
+      res.send('delete successful');
+    } catch(error) {
+      // ...or error message
+      if (error.name == 'CastError') {
+        res.send('no book exists');
+      /*} else if (error == 'invalid id') {
+        res.json({ error: "could not delete", "_id": req.body._id });*/
+      } else {
+        console.log(error);
+      }
+    }
     });
   
 };
