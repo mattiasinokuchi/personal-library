@@ -124,6 +124,8 @@ module.exports = function (app) {
         // ...or sends error message
         if (error == 'empty comment field') {
           res.send("missing required field comment");
+        } else if (error.name == 'CastError') {
+          res.send('no book exists');
         } else {
           console.log(error);
         }
