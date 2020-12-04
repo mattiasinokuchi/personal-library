@@ -139,11 +139,20 @@ suite('Functional Tests', function() {
           done();
         });
       });
-/*
-      test('Test POST /api/books/[id] without comment field', function(done){
-        //done();
-      });
 
+      test('Test POST /api/books/[id] without comment field', function(done){
+        chai.request(server)
+        .post(urlWithValidId)
+        .send({
+          comment: ''
+        })
+        .end(function(err, res) {
+          assert.equal(res.status, 200);
+          assert.equal(res.text, 'missing required field comment');
+          done();
+        });
+      });
+/*
       test('Test POST /api/books/[id] with comment, id not in db', function(done){
         //done();
       });

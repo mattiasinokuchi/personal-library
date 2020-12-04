@@ -100,6 +100,10 @@ module.exports = function (app) {
     // handler for POST request of a comment...
     .post(async function(req, res) {
       try {
+        // ...checks for empty comment field...
+        if (req.body.comment == '') {
+          throw 'empty comment field';
+        }
         // ...finds a document...
         let doc = await Document.findById(req.params.id);
         // ...adds the comment...
@@ -118,8 +122,8 @@ module.exports = function (app) {
         });
       } catch (error) {
         // ...or sends error message
-        if (error.name == 'ValidationError') {
-          res.send("missing required field title");
+        if (error == 'empty comment field') {
+          res.send("missing required field comment");
         } else {
           console.log(error);
         }
