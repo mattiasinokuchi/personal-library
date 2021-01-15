@@ -107,7 +107,7 @@ suite('Functional Tests', function() {
       
       test('Test GET /api/books/[id] with valid id in db', function(done) {
 
-      urlWithValidId = '/api/books/' + testId;
+        urlWithValidId = '/api/books/' + testId;
 
         chai.request(server)
         .get(urlWithValidId)

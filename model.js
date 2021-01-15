@@ -24,7 +24,7 @@ const schema = new mongoose.Schema({
   },
   comments: {
     type: Array,
-    required: [true, 'missing field']
+    default: []
   },
   commentcount: {
     type: Number,
