@@ -70,6 +70,7 @@ module.exports = function (app) {
       try {
         // ...finds requested documents in      database...
         let doc = await Document.findById(req.params.id);
+        if (!doc) throw "CastError";
         // ...and returns the data...
         res.json({
           comments: doc.comments,
@@ -80,7 +81,7 @@ module.exports = function (app) {
         });
       } catch(error) {
         // ..or returns a error message
-        if (error.name == 'CastError') {
+        if (error.name == "CastError" || error == "CastError") {
           res.send('no book exists');
         } else {
           console.log(error);
@@ -92,11 +93,12 @@ module.exports = function (app) {
     .post(async function(req, res) {
       try {
         // ...checks for empty comment field...
-        if (req.body.comment == '') {
-          throw 'empty comment field';
+        if (!req.body.comment) {
+          throw 'missing required field comment';
         }
         // ...finds a document...
         let doc = await Document.findById(req.params.id);
+        if (!doc) throw "CastError";
         // ...adds the comment...
         doc.comments.push(req.body.comment);
         // ...increments counter...
@@ -113,9 +115,9 @@ module.exports = function (app) {
         });
       } catch (error) {
         // ...or sends error message
-        if (error == 'empty comment field') {
-          res.send("missing required field comment");
-        } else if (error.name == 'CastError') {
+        if (error == 'missing required field comment') {
+          res.send(error);
+        } else if (error.name == "CastError" || error == "CastError") {
           res.send('no book exists');
         } else {
           console.log(error);
@@ -128,11 +130,12 @@ module.exports = function (app) {
       try {
         // ...finds and deletes requested document in database...
         let doc = await Document.findByIdAndDelete(req.params.id);
+        if (!doc) throw "CastError";
         // ...returns message...
         res.send('delete successful');
       } catch(error) {
         // ...or error message
-        if (error.name == 'CastError') {
+        if (error.name == "CastError" || error == "CastError") {
           res.send('no book exists');
         } else {
           console.log(error);
